@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { ApplicationState }  from '../store';
+import { ApplicationState, ENTER_KEY, ESCAPE_KEY } from '../store';
 import * as WordsState from '../store/WeatherForecasts';
 import TextareaAutosize from 'react-autosize-textarea';
 
@@ -11,7 +11,17 @@ type WordsProps =
     & typeof WordsState.actionCreators      // ... plus action creators we've requested
     & RouteComponentProps<{}>; // ... plus incoming routing parameters   
 
-class Home extends React.Component<WordsProps, {}> {
+export interface WordsState {
+    data: string;
+}
+
+class Home extends React.Component<WordsProps, WordsState> {
+
+    constructor(props: WordsProps) {
+        super(props);
+        this.state = { data: '' };
+    }
+
     componentWillMount() {
         // This method runs when the component is first added to the page
         //let startDateIndex = parseInt(this.props.match.params.startDateIndex) || 0;
@@ -31,8 +41,17 @@ class Home extends React.Component<WordsProps, {}> {
         </div>;
     }
 
-    private updateData(e) {
-        this.props.dataChanged(e.target.value);
+    private handleChange = (event) => {
+        this.setState({ data: event.target.value });
+    }
+
+    private handleKeyDown = (event) => {
+        if (event.which === ESCAPE_KEY) {
+            this.setState({ data: '' });
+            //this.props.onCancel(event);
+        } else if (event.which === ENTER_KEY) {
+            this.props.submit(event.target.value);
+        }
     }
 
     private renderWriteSentence() {
@@ -41,10 +60,11 @@ class Home extends React.Component<WordsProps, {}> {
                 rows={3}
                 className='col-lg-12 form-control'
                 placeholder='Write the sentence'
-                value={this.props.data}
-                onBlur={this.updateData}
+                value={this.state.data}
+                onChange={this.handleChange}
+                onKeyDown={this.handleKeyDown}
             />
-            <button onClick={() => { this.props.submit(this.props.data) }}>Submit</button>
+            <button onClick={() => { this.props.submit(this.state.data) }}>Submit</button>
         </div>;
     }
 }
