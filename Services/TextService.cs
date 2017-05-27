@@ -47,7 +47,7 @@ namespace WordsSentence.Services
 
         private Text CreateModel(string text)
         {
-            text.Replace(',', ' ');
+            text = text.Replace(',', ' ');
 
             var model = new Text
             {
