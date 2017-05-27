@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { ApplicationState, ENTER_KEY, ESCAPE_KEY } from '../store';
-import * as WordsState from '../store/WeatherForecasts';
+import * as WordsState from '../store/Text';
 import TextareaAutosize from 'react-autosize-textarea';
 
 // At runtime, Redux will merge together...
@@ -48,9 +48,6 @@ class Home extends React.Component<WordsProps, WordsState> {
     private handleKeyDown = (event) => {
         if (event.which === ESCAPE_KEY) {
             this.setState({ data: '' });
-            //this.props.onCancel(event);
-        } else if (event.which === ENTER_KEY) {
-            this.props.submit(event.target.value);
         }
     }
 
@@ -64,12 +61,14 @@ class Home extends React.Component<WordsProps, WordsState> {
                 onChange={this.handleChange}
                 onKeyDown={this.handleKeyDown}
             />
-            <button onClick={() => { this.props.submit(this.state.data) }}>Submit</button>
+            <button onClick={() => { this.props.submitAsXml(this.state.data) }}>Submit as XML</button>
+            <button onClick={() => { this.props.submitAsCsv(this.state.data) }}>Submit as CSV</button>
+            <p>{ this.props.returnedData }</p>
         </div>;
     }
 }
 
 export default connect(
-    (state: ApplicationState) => state.weatherForecasts, // Selects which state properties are merged into the component's props
+    (state: ApplicationState) => state.text, // Selects which state properties are merged into the component's props
     WordsState.actionCreators                 // Selects which action creators are merged into the component's props
 )(Home) as typeof Home;

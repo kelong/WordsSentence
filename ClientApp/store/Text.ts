@@ -8,6 +8,7 @@ import { AppThunkAction } from './';
 export interface WordsState {
     isLoading: boolean;
     data: string;
+    returnedData: string;
 }
 
 // -----------------
@@ -19,19 +20,24 @@ interface ChangeSentenceAction {
     data: string
 }
 
-interface PostSentenceAction {
-    type: 'POST_SENTENCE',
+interface PostSentenceAsXmlAction {
+    type: 'POST_SENTENCE_AS_XML',
+    data: string;
+}
+
+interface PostSentenceAsCsvAction {
+    type: 'POST_SENTENCE_AS_CSV',
     data: string;
 }
 
 interface ReceiveSentenceAction {
     type: 'RECEIVE_SENTENCE',
-    data: string;
+    returnedData: string;
 }
 
 // Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
 // declared type strings (and not any other arbitrary string).
-type KnownAction = PostSentenceAction | ReceiveSentenceAction | ChangeSentenceAction;
+type KnownAction = PostSentenceAsXmlAction | PostSentenceAsCsvAction | ReceiveSentenceAction | ChangeSentenceAction;
 
 // ----------------
 // ACTION CREATORS - These are functions exposed to UI components that will trigger a state transition.
@@ -43,45 +49,76 @@ export const actionCreators = {
         dispatch({ type: 'CHANGE_SENTENCE', data: data });
     },
   
-    submit: (data: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
-        // Only load data if it's something we don't already have (and are not already loading)
-        // if (startDateIndex !== getState().weatherForecasts.startDateIndex) {
-        let fetchTask = fetch('/api/Sentence/Save', {
+    submitAsXml: (data: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
+
+        var headers = new Headers();
+        headers.set("content-type", "application/json");
+
+        let fetchTask = fetch('/api/Sentence/GenerateXmlFromText', {
             method: 'post',
             body: JSON.stringify({
-                data: data
-            })
-        }).then(response => response.json() as Promise<string>)
+                Data: data
+            }),
+            headers: headers
+        }).then(response => response.json() as Promise<any>)
             .then(data => {
                 console.log(data);
-                dispatch({ type: 'RECEIVE_SENTENCE', data: data });
+                dispatch({ type: 'RECEIVE_SENTENCE', returnedData: data.data });
             });
 
         addTask(fetchTask); // Ensure server-side prerendering waits for this to complete
-        dispatch({ type: 'POST_SENTENCE', data: data });
-        //}
+        dispatch({ type: 'POST_SENTENCE_AS_XML', data: data });
+    },
+
+    submitAsCsv: (data: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
+        var headers = new Headers();
+        headers.set("content-type", "application/json");
+
+        let fetchTask = fetch('api/Sentence/GenerateCsvFromText', {
+            method: 'post',
+            body: JSON.stringify({
+                Data: data
+            }),
+            headers: headers
+        }).then(response => response.json() as Promise<any>)
+            .then(data => {
+                console.log(data);
+                dispatch({ type: 'RECEIVE_SENTENCE', returnedData: data.data });
+            });
+
+            addTask(fetchTask);
+            dispatch({ type: 'POST_SENTENCE_AS_CSV', data: data });
     }
 };
 
 // ----------------
 // REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
 
-const unloadedState: WordsState = { data: "", isLoading: false };
+const unloadedState: WordsState = { returnedData: "", data: "", isLoading: false };
 
 export const reducer: Reducer<WordsState> = (state: WordsState, action: KnownAction) => {
     switch (action.type) {
-        case 'POST_SENTENCE':
+        case 'POST_SENTENCE_AS_XML':
             return {
+                returnedData: "",
+                data: state.data,
+                isLoading: true
+            };
+        case 'POST_SENTENCE_AS_CSV':
+            return {
+                returnedData: "",
                 data: state.data,
                 isLoading: true
             };
         case 'RECEIVE_SENTENCE':
             return {
-                data: action.data,
+                returnedData: action.returnedData,
+                data: state.data,
                 isLoading: false
             };
         case 'CHANGE_SENTENCE':
             return {
+                returnedData: "",
                 data: action.data,
                 isLoading: false
             };
