@@ -20,7 +20,7 @@ namespace WordsStorage.Controllers
         [HttpPost("[action]")]
         public IActionResult GenerateXmlFromText([FromBody]TextToConvert textToConvert)
         {
-            if (textToConvert == null || string.IsNullOrWhiteSpace(textToConvert.Data))
+            if (textToConvert == null)
                 throw new ArgumentNullException(nameof(TextToConvert));
 
             return Ok(new {
@@ -31,7 +31,7 @@ namespace WordsStorage.Controllers
         [HttpPost("[action]")]
         public IActionResult GenerateCsvFromText([FromBody]TextToConvert textToConvert)
         {
-            if (textToConvert == null || string.IsNullOrWhiteSpace(textToConvert.Data))
+            if (textToConvert == null)
                 throw new ArgumentNullException(nameof(TextToConvert));
 
             return Ok(new {

@@ -3,10 +3,9 @@ using WordsSentence.ServiceContracts;
 using WordsSentence.Model;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Serialization;
 using System.IO;
 using System.Xml;
-using ServiceStack.Text;
+using System.Text;
 
 namespace WordsSentence.Services
 {
@@ -14,35 +13,56 @@ namespace WordsSentence.Services
     {
         public string CreateCsvFromSentence(string text)
         {
-            var csv = string.Empty;
-            if (string.IsNullOrWhiteSpace(text)) return csv;
+            if (string.IsNullOrWhiteSpace(text)) return string.Empty;
 
             var model = CreateModel(text);
 
-            csv = ServiceStack.Text.CsvSerializer.SerializeToString(model);
+            var result = new StringBuilder();
 
-            return csv;
+            var maxWords = model.Sentences.Max(s => s.Words.Count);
+
+            for (var i = 1; i <= maxWords; i++)
+            {
+                result.Append($", Word{i}");
+            }
+
+            result.AppendLine();
+
+            for (var i = 1; i <= model.Sentences.Count; i++)
+            {
+                var sentence = model.Sentences[i - 1];
+                result.AppendLine($"Sentence {i}, {string.Join(", ", sentence.Words)}");
+            }
+
+            return result.ToString();
         }
 
         public string CreateXmlFromSentence(string text)
         {
-            var xml = string.Empty;
-            if (string.IsNullOrWhiteSpace(text)) return xml;
+            if (string.IsNullOrWhiteSpace(text)) return string.Empty;
 
             var model = CreateModel(text);
 
-            var xsSubmit = new System.Xml.Serialization.XmlSerializer(typeof(Text));
-            
-            using(var sww = new StringWriter())
+            var result = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
+
+            result.AppendLine();
+            result.AppendLine("<text>");
+
+            foreach (var sentence in model.Sentences)
             {
-                using(var writer = XmlWriter.Create(sww))
+                result.AppendLine("<sentence>");
+
+                foreach (var word in sentence.Words)
                 {
-                    xsSubmit.Serialize(writer, model);
-                    xml = sww.ToString();
+                    result.AppendLine($"<word>{word}</word>");
                 }
+
+                result.AppendLine("</sentence>");
             }
 
-            return xml;
+            result.AppendLine("<text>");
+
+            return result.ToString();
         }
 
         private Text CreateModel(string text)
