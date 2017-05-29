@@ -22,18 +22,6 @@ class Home extends React.Component<WordsProps, WordsState> {
         this.state = { data: '' };
     }
 
-    componentWillMount() {
-        // This method runs when the component is first added to the page
-        //let startDateIndex = parseInt(this.props.match.params.startDateIndex) || 0;
-        //this.props.requestWeatherForecasts(startDateIndex);
-    }
-
-    componentWillReceiveProps(nextProps: WordsProps) {
-        // This method runs when incoming props (e.g., route params) change
-        //let startDateIndex = parseInt(nextProps.match.params.startDateIndex) || 0;
-        //this.props.requestWeatherForecasts(startDateIndex);
-    }
-    
     public render() {
         return <div>
             <h1>Words storage</h1>
