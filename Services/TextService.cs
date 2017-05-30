@@ -17,13 +17,15 @@ namespace WordsSentence.Services
 
             var model = CreateModel(text);
 
+            if (model == null) return string.Empty;
+
             var result = new StringBuilder();
 
             var maxWords = model.Sentences.Max(s => s.Words.Count);
 
             for (var i = 1; i <= maxWords; i++)
             {
-                result.Append($", Word{i}");
+                result.Append($", Word {i}");
             }
 
             result.AppendLine();
@@ -34,7 +36,7 @@ namespace WordsSentence.Services
                 result.AppendLine($"Sentence {i}, {string.Join(", ", sentence.Words)}");
             }
 
-            return result.ToString();
+            return result.ToString().Trim();
         }
 
         public string CreateXmlFromSentence(string text)
@@ -42,6 +44,8 @@ namespace WordsSentence.Services
             if (string.IsNullOrWhiteSpace(text)) return string.Empty;
 
             var model = CreateModel(text);
+
+            if (model == null) return string.Empty;
 
             var result = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
 
@@ -60,7 +64,7 @@ namespace WordsSentence.Services
                 result.AppendLine("</sentence>");
             }
 
-            result.AppendLine("<text>");
+            result.Append("</text>");
 
             return result.ToString();
         }
@@ -68,6 +72,10 @@ namespace WordsSentence.Services
         private Text CreateModel(string text)
         {
             text = text.Replace(',', ' ');
+            text = text.Replace('\r', ' ');
+            text = text.Replace('\n', ' ');
+
+            if (string.IsNullOrWhiteSpace(text)) return null;
 
             var model = new Text
             {
@@ -78,6 +86,8 @@ namespace WordsSentence.Services
 
             foreach (var sentence in sentences)
             {
+                if (string.IsNullOrWhiteSpace(sentence)) continue;
+
                 var modelSentence = new Sentence
                 {
                     Words = new List<string>()
@@ -86,7 +96,8 @@ namespace WordsSentence.Services
                 var words = sentence.Trim().Split(' ').OrderBy(s => s);
                 foreach (var word in words)
                 {
-                    modelSentence.Words.Add(word.Trim());
+                    if (!string.IsNullOrWhiteSpace(word))
+                        modelSentence.Words.Add(word.Trim());
                 }
                 model.Sentences.Add(modelSentence);
             }
