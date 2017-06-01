@@ -1,6 +1,6 @@
 {
     "name": "WordsStorage",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "dependencies": {
         "@types/history": "4.5.1",
         "@types/react": "15.0.24",
@@ -40,6 +40,18 @@
         "webpack-merge": "4.1.0"
     },
     "devDependencies": {
-        "react-autosize-textarea": "^0.4.3"
+        "react-autosize-textarea": "^0.4.3",
+        "jest": "^20.0.4",
+        "react-addons-test-utils": "^15.5.1"
+    },
+    "scripts": {
+        "test": "jest"
+    },
+    "jest": {
+        "moduleFileExtensions": ["ts", "tsx", "js"],
+        "transform": {
+            "^.+\\.(ts|tsx)$": "<rootDir>/preprocessor.js"
+        },
+        "testMatch": ["**/*-test.(ts|tsx|js)"]
     }
 }
