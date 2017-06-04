@@ -17,19 +17,19 @@ namespace WordsStorage.Controllers
             _textService = textService;
         }
 
-        [HttpPost("[action]")]
-        public IActionResult GenerateXmlFromText([FromBody]TextToConvert textToConvert)
+        [HttpPost("[action]/{Data}")]
+        public IActionResult GenerateXmlFromText(TextToConvert textToConvert)
         {
             if (textToConvert == null)
                 throw new ArgumentNullException(nameof(TextToConvert));
 
-            return Ok(new {
+             return Ok(new {
                 Data = _textService.CreateXmlFromSentence(textToConvert.Data)
             });
         }
 
-        [HttpPost("[action]")]
-        public IActionResult GenerateCsvFromText([FromBody]TextToConvert textToConvert)
+        [HttpPost("[action]/{Data}")]
+        public IActionResult GenerateCsvFromText(TextToConvert textToConvert)
         {
             if (textToConvert == null)
                 throw new ArgumentNullException(nameof(TextToConvert));

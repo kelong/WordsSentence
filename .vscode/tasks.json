@@ -5,13 +5,11 @@
     "command": "dotnet",
     "isShellCommand": true,
     "args": [],
-    "tasks": [
-        {
-            "taskName": "build",
-            "args": [ ],
-            "isBuildCommand": true,
-            "showOutput": "silent",
-            "problemMatcher": "$msCompile"
-        }
-    ]
+    "tasks": [{
+        "taskName": "build",
+        "args": [],
+        "isBuildCommand": true,
+        "showOutput": "silent",
+        "problemMatcher": "$msCompile"
+    }]
 }

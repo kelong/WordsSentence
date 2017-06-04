@@ -22,17 +22,17 @@ interface ChangeSentenceAction {
 
 interface PostSentenceAsXmlAction {
     type: 'POST_SENTENCE_AS_XML',
-    data: string;
+    data: string
 }
 
 interface PostSentenceAsCsvAction {
     type: 'POST_SENTENCE_AS_CSV',
-    data: string;
+    data: string
 }
 
 interface ReceiveSentenceAction {
     type: 'RECEIVE_SENTENCE',
-    returnedData: string;
+    returnedData: string
 }
 
 // Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
@@ -50,44 +50,41 @@ export const actionCreators = {
     },
   
     submitAsXml: (data: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
-
         var headers = new Headers();
         headers.set("content-type", "application/json");
 
-        let fetchTask = fetch('/api/Sentence/GenerateXmlFromText', {
+        let fetchTask = fetch('/api/Sentence/GenerateXmlFromText/' + data,
+        {
             method: 'post',
-            body: JSON.stringify({
-                Data: data
-            }),
             headers: headers
         }).then(response => response.json() as Promise<any>)
             .then(data => {
-                console.log(data);
                 dispatch({ type: 'RECEIVE_SENTENCE', returnedData: data.data });
             });
 
         addTask(fetchTask); // Ensure server-side prerendering waits for this to complete
         dispatch({ type: 'POST_SENTENCE_AS_XML', data: data });
+
+        return fetchTask;
     },
 
     submitAsCsv: (data: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
         var headers = new Headers();
         headers.set("content-type", "application/json");
 
-        let fetchTask = fetch('api/Sentence/GenerateCsvFromText', {
+        let fetchTask = fetch('api/Sentence/GenerateCsvFromText/' + data,
+        {
             method: 'post',
-            body: JSON.stringify({
-                Data: data
-            }),
             headers: headers
         }).then(response => response.json() as Promise<any>)
             .then(data => {
-                console.log(data);
                 dispatch({ type: 'RECEIVE_SENTENCE', returnedData: data.data });
             });
 
-            addTask(fetchTask);
-            dispatch({ type: 'POST_SENTENCE_AS_CSV', data: data });
+        addTask(fetchTask);
+        dispatch({ type: 'POST_SENTENCE_AS_CSV', data: data });
+
+        return fetchTask;
     }
 };
 
