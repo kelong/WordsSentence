@@ -28,12 +28,12 @@ namespace WordsSentence.Services
                 result.Append($", Word {i}");
             }
 
-            result.AppendLine();
+            result.Append("\n");
 
             for (var i = 1; i <= model.Sentences.Count; i++)
             {
                 var sentence = model.Sentences[i - 1];
-                result.AppendLine($"Sentence {i}, {string.Join(", ", sentence.Words)}");
+                result.Append($"Sentence {i}, {string.Join(", ", sentence.Words)}\n");
             }
 
             return result.ToString().Trim();
@@ -47,24 +47,21 @@ namespace WordsSentence.Services
 
             if (model == null) return string.Empty;
 
-            var result = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
-
-            result.AppendLine();
-            result.AppendLine("<text>");
+            var result = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<text>\n");
 
             foreach (var sentence in model.Sentences)
             {
-                result.AppendLine("<sentence>");
+                result.Append("<sentence>\n");
 
                 foreach (var word in sentence.Words)
                 {
-                    result.AppendLine($"<word>{word}</word>");
+                    result.Append($"<word>{word}</word>\n");
                 }
 
-                result.AppendLine("</sentence>");
+                result.Append("</sentence>\n");
             }
 
-            result.Append("</text>");
+            result.Append("</text>\n");
 
             return result.ToString();
         }

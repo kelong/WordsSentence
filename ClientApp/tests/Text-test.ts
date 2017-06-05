@@ -7,7 +7,7 @@ const middlewares = [ thunk ];
 const mockStore = configureStore(middlewares);
  
 import { baseUrl } from 'domain-task/fetch';
-baseUrl('http://localhost:5000');//Relative URLs will be resolved against this
+baseUrl('http://localhost:5000'); // Relative URLs will be resolved against this
 
 import { actionCreators } from '../store/Text';
  
@@ -25,7 +25,7 @@ describe('Submit sentence action creators', () => {
         "type": "POST_SENTENCE_AS_XML"
       },
       {
-        "returnedData": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<text>\n<sentence>\n<word>12345</word>\n</sentence>\n</text>",
+        "returnedData": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<text>\n<sentence>\n<word>12345</word>\n</sentence>\n</text>\n",
         "type": "RECEIVE_SENTENCE"
       }
     ];
