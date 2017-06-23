@@ -4,6 +4,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import { Provider } from 'react-redux';
+import ReduxModal from 'react-redux-modal';
 import { ConnectedRouter } from 'react-router-redux';
 import { createBrowserHistory } from 'history';
 import configureStore from './configureStore';
@@ -24,7 +25,10 @@ function renderApp() {
     ReactDOM.render(
         <AppContainer>
             <Provider store={ store }>
-                <ConnectedRouter history={ history } children={ routes } />
+                <div>
+                    <ConnectedRouter history={ history } children={ routes } />
+                    <ReduxModal />
+                </div>
             </Provider>
         </AppContainer>,
         document.getElementById('react-app')
