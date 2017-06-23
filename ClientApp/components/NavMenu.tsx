@@ -24,7 +24,7 @@ export class NavMenu extends React.Component<{}, {}> {
                         </li>
                         <li>
                             <NavLink exact to={ '/yourComponent' } activeClassName='active'>
-                                <span className='glyphicon glyphicon-home'></span> YourComponent
+                                <span className='glyphicon glyphicon-display'></span> Modal
                             </NavLink>
                         </li>
                     </ul>
