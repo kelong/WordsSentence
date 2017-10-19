@@ -54,7 +54,7 @@ namespace WordsSentence.Tests
         {
             var result = _textService.CreateXmlFromSentence("myWord");
 
-            Assert.Equal($@"{_expectedResult}{Environment.NewLine}<text>{Environment.NewLine}<sentence>{Environment.NewLine}<word>myWord</word>{Environment.NewLine}</sentence>{Environment.NewLine}</text>", result);
+            Assert.Equal($@"{_expectedResult}{Environment.NewLine}<text>{Environment.NewLine}<sentence>{Environment.NewLine}<word>myWord</word>{Environment.NewLine}</sentence>{Environment.NewLine}</text>{Environment.NewLine}", result);
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace WordsSentence.Tests
         {
             var result = _textService.CreateXmlFromSentence("myWord. myWord2");
 
-            Assert.Equal($@"{_expectedResult}{Environment.NewLine}<text>{Environment.NewLine}<sentence>{Environment.NewLine}<word>myWord</word>{Environment.NewLine}</sentence>{Environment.NewLine}<sentence>{Environment.NewLine}<word>myWord2</word>{Environment.NewLine}</sentence>{Environment.NewLine}</text>", result);
+            Assert.Equal($@"{_expectedResult}{Environment.NewLine}<text>{Environment.NewLine}<sentence>{Environment.NewLine}<word>myWord</word>{Environment.NewLine}</sentence>{Environment.NewLine}<sentence>{Environment.NewLine}<word>myWord2</word>{Environment.NewLine}</sentence>{Environment.NewLine}</text>{Environment.NewLine}", result);
         }
 
         [Fact]
@@ -76,7 +76,7 @@ namespace WordsSentence.Tests
 
             var result = _textService.CreateXmlFromSentence(param);
 
-            var expectedResult = $"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>{Environment.NewLine}<text>{Environment.NewLine}<sentence>{Environment.NewLine}<word>a</word>{Environment.NewLine}<word>had</word>{Environment.NewLine}<word>lamb</word>{Environment.NewLine}<word>little</word>{Environment.NewLine}<word>Mary</word>{Environment.NewLine}</sentence>{Environment.NewLine}<sentence>{Environment.NewLine}<word>Aesop</word>{Environment.NewLine}<word>and</word>{Environment.NewLine}<word>called</word>{Environment.NewLine}<word>came</word>{Environment.NewLine}<word>for</word>{Environment.NewLine}<word>Peter</word>{Environment.NewLine}<word>the</word>{Environment.NewLine}<word>wolf</word>{Environment.NewLine}</sentence>{Environment.NewLine}<sentence>{Environment.NewLine}<word>Cinderella</word>{Environment.NewLine}<word>likes</word>{Environment.NewLine}<word>shoes</word>{Environment.NewLine}</sentence>{Environment.NewLine}</text>";
+            var expectedResult = $"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>{Environment.NewLine}<text>{Environment.NewLine}<sentence>{Environment.NewLine}<word>a</word>{Environment.NewLine}<word>had</word>{Environment.NewLine}<word>lamb</word>{Environment.NewLine}<word>little</word>{Environment.NewLine}<word>Mary</word>{Environment.NewLine}</sentence>{Environment.NewLine}<sentence>{Environment.NewLine}<word>Aesop</word>{Environment.NewLine}<word>and</word>{Environment.NewLine}<word>called</word>{Environment.NewLine}<word>came</word>{Environment.NewLine}<word>for</word>{Environment.NewLine}<word>Peter</word>{Environment.NewLine}<word>the</word>{Environment.NewLine}<word>wolf</word>{Environment.NewLine}</sentence>{Environment.NewLine}<sentence>{Environment.NewLine}<word>Cinderella</word>{Environment.NewLine}<word>likes</word>{Environment.NewLine}<word>shoes</word>{Environment.NewLine}</sentence>{Environment.NewLine}</text>{Environment.NewLine}";
 
             Assert.Equal(expectedResult, result);
         }

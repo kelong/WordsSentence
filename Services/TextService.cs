@@ -28,12 +28,12 @@ namespace WordsSentence.Services
                 result.Append($", Word {i}");
             }
 
-            result.Append("\n");
+            result.Append($"{Environment.NewLine}");
 
             for (var i = 1; i <= model.Sentences.Count; i++)
             {
                 var sentence = model.Sentences[i - 1];
-                result.Append($"Sentence {i}, {string.Join(", ", sentence.Words)}\n");
+                result.Append($"Sentence {i}, {string.Join(", ", sentence.Words)}{Environment.NewLine}");
             }
 
             return result.ToString().Trim();
@@ -47,21 +47,21 @@ namespace WordsSentence.Services
 
             if (model == null) return string.Empty;
 
-            var result = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<text>\n");
+            var result = new StringBuilder($"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>{Environment.NewLine}<text>{Environment.NewLine}");
 
             foreach (var sentence in model.Sentences)
             {
-                result.Append("<sentence>\n");
+                result.Append($"<sentence>{Environment.NewLine}");
 
                 foreach (var word in sentence.Words)
                 {
-                    result.Append($"<word>{word}</word>\n");
+                    result.Append($"<word>{word}</word>{Environment.NewLine}");
                 }
 
-                result.Append("</sentence>\n");
+                result.Append($"</sentence>{Environment.NewLine}");
             }
 
-            result.Append("</text>\n");
+            result.Append($"</text>{Environment.NewLine}");
 
             return result.ToString();
         }
